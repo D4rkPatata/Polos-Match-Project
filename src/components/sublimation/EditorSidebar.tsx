@@ -1,11 +1,14 @@
 'use client'
 import { useRef } from 'react'
-import { PIECES, type PieceKey } from '@/lib/pieces'
+import type { ColorConfig, PrendaConfig } from '@/lib/prendas'
 
 interface Props {
-  activePiece:   PieceKey
+  prenda:        PrendaConfig
+  activePiece:   string
   hasSelection:  boolean
-  onPieceChange: (p: PieceKey) => void
+  poloColor:     ColorConfig
+  onPieceChange: (p: string) => void
+  onColorChange: (c: ColorConfig) => void
   onAddImage:    (dataUrl: string) => void
   onAddText:     () => void
   onDelete:      () => void
@@ -14,8 +17,8 @@ interface Props {
 }
 
 export default function EditorSidebar({
-  activePiece, hasSelection,
-  onPieceChange, onAddImage, onAddText, onDelete, onClearPiece, onClearAll,
+  prenda, activePiece, hasSelection, poloColor,
+  onPieceChange, onColorChange, onAddImage, onAddText, onDelete, onClearPiece, onClearAll,
 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -34,13 +37,36 @@ export default function EditorSidebar({
   return (
     <div className="flex flex-col gap-5 w-52">
 
+      {/* ── Color del polo ── */}
+      <section>
+        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
+          Color del polo
+        </p>
+        <div className="flex gap-2 flex-wrap">
+          {prenda.colores.map(c => (
+            <button
+              key={c.key}
+              onClick={() => onColorChange(c)}
+              title={c.label}
+              className={`w-9 h-9 rounded-full transition-all ${
+                poloColor.key === c.key
+                  ? 'ring-2 ring-offset-2 ring-[#378ADD] scale-110 shadow-md'
+                  : 'ring-1 ring-gray-300 hover:ring-gray-500'
+              }`}
+              style={{ backgroundColor: c.hex }}
+            />
+          ))}
+        </div>
+        <p className="text-[10px] text-gray-400 mt-1.5">{poloColor.label}</p>
+      </section>
+
       {/* ── Pieza activa ── */}
       <section>
         <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
           Pieza activa
         </p>
         <div className="flex flex-col gap-1">
-          {PIECES.map(p => (
+          {prenda.piezas.map(p => (
             <button
               key={p.key}
               onClick={() => onPieceChange(p.key)}

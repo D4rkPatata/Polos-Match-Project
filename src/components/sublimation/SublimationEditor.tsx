@@ -1,6 +1,6 @@
 'use client'
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { CANVAS_H, CANVAS_W, getPieceAt, PIECES, type PieceKey } from '@/lib/pieces'
+import { CANVAS_H, CANVAS_W, getPieceAt, PIECES, TEMPLATE_SRC, type PieceKey } from '@/lib/pieces'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -312,7 +312,7 @@ const SublimationEditor = forwardRef<EditorHandle, Props>(function SublimationEd
 
     const tmpl = new Image()
     tmpl.onload = onLoad; tmpl.onerror = onLoad
-    tmpl.src = '/assets/template.png'
+    tmpl.src = TEMPLATE_SRC
     templateImg.current = tmpl
 
     for (const piece of PIECES) {
@@ -562,8 +562,8 @@ const SublimationEditor = forwardRef<EditorHandle, Props>(function SublimationEd
         onMouseUp={handleUp}
         onMouseLeave={handleUp}
         onDoubleClick={handleDblClick}
-        className="rounded-lg shadow-sm border border-gray-200 block"
-        style={{ cursor: 'default', userSelect: 'none', width: CANVAS_W, height: CANVAS_H }}
+        className="rounded-lg shadow-sm border border-gray-200 block w-full h-auto"
+        style={{ cursor: 'default', userSelect: 'none', maxWidth: CANVAS_W }}
       />
       {textEdit && (
         <input
